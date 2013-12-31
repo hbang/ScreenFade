@@ -12,7 +12,7 @@
 
 		<dict>
 			<key>cell</key>			<string>PSTitleValueCell</string>
-			<key>label</key>		<string>Fade Duration</string>
+			<key>label</key>		<string>Fade Duration (in seconds):</string>
 		</dict>
 
 		<dict>
