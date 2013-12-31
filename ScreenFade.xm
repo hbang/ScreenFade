@@ -1,6 +1,4 @@
 #import <SpringBoard/SpringBoard.h>
-#import <SpringBoard/SBLockStateAggregator.h>
-
 #import <UIKit/UIWindow+Private.h>
 
 BOOL isAnimating = NO;
@@ -20,7 +18,7 @@ void HBSFFadeScreen(BOOL direction, void(^callback)(void)) {
 	fadeWindow.hidden = NO;
 
 	NSNumber *userDuration = [[NSDictionary dictionaryWithContentsOfFile:[NSHomeDirectory() stringByAppendingPathComponent:@"/Library/Preferences/ws.hbang.screenfade.plist"]] objectForKey:@"userDuration"];
-	CGFloat duration =userDuration?userDuration.floatValue:0.15f;
+	CGFloat duration = userDuration?userDuration.floatValue:0.15f;
 
 	NSLog(@"--- duration : %f", duration); 
 
@@ -45,11 +43,35 @@ void HBSFFadeScreen(BOOL direction, void(^callback)(void)) {
 }
 
 
+//SBDeviceLockStateChangedNotification, userInfo = @{kSBNotificationKeyState : 1 (locked) | 0 (unlocked)}
+%hook SBUIController
+-(void)_deviceLockStateChanged:(NSNotification *)changed{
+	if([[changed.userInfo objectForKey:@"kSBNotificationKeyState"] boolValue])
+		HBSFFadeScreen(YES, ^{ %orig; });
+	else
+		HBSFFadeScreen(NO, ^{ %orig; });
+}
+%end
 
-/* iOS 7 and above */
+
+/*
+%hook SBFadeAnimationSettings
+//@property(assign, nonatomic) float backlightFadeDuration;
+
+-(void)setDefaultValues{
+	%orig;
+
+	NSNumber *userDuration = [[NSDictionary dictionaryWithContentsOfFile:[NSHomeDirectory() stringByAppendingPathComponent:@"/Library/Preferences/ws.hbang.screenfade.plist"]] objectForKey:@"userDuration"];
+	self.backlightFadeDuration = userDuration?userDuration.floatValue:0.15f;
+}
+
+%end*/
+
+/*
+ iOS 7 and above 
 %hook SBLockStateAggregator
 
-//Only works for unlocking
+//Only works for unlocking from ls
 -(void)_updateLockState{
 	if([self lockState] == 0)
 		HBSFFadeScreen(YES, ^{%orig;});
@@ -61,7 +83,7 @@ void HBSFFadeScreen(BOOL direction, void(^callback)(void)) {
 
 %hook SBUIController
 
-/* iOS 6 and below */
+ iOS 6 and below 
 -(void)lockFromSource:(NSInteger)source{
 	if([[[UIDevice currentDevice] systemVersion] floatValue] < 7.0){
 		HBSFFadeScreen(NO, ^{
@@ -85,4 +107,4 @@ void HBSFFadeScreen(BOOL direction, void(^callback)(void)) {
 	%orig;
 }//end setdimmed
 
-%end
+%end*/
