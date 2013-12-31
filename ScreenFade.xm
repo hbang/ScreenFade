@@ -8,39 +8,9 @@
 
 /* iOS 7 and above */
 %hook SBBacklightController
-BOOL backlighting;
-
 -(void)animateBacklightToFactor:(float)factor duration:(double)duration source:(int)source completion:(void (^)(void))completion{
-	if(factor > 0.f && factor < 1.f)
-		%orig;
-
-	if(backlighting)
-		return;
-
-	backlighting = YES;
-	UIWindow *fadeWindow = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-	fadeWindow.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-	fadeWindow.backgroundColor = [UIColor blackColor];
-	fadeWindow.alpha = (factor == 0.f)?0.f:1.f;
-	fadeWindow.userInteractionEnabled = NO;
-	fadeWindow.windowLevel = UIWindowLevelAlert + 10.f;
-	fadeWindow.hidden = NO;
-
 	NSNumber *userDuration = [[NSDictionary dictionaryWithContentsOfFile:[NSHomeDirectory() stringByAppendingPathComponent:@"/Library/Preferences/ws.hbang.screenfade.plist"]] objectForKey:@"userDuration"];
-
-	[UIView animateWithDuration:(userDuration?userDuration.floatValue:duration) animations:^{
-		fadeWindow.alpha = (fadeWindow.alpha == 0.f)?1.f:0.f;
-	} completion:^(BOOL finished) {
-		if(fadeWindow.alpha == 0)
-			%orig(0.f, 0.0, source, completion);
-		else
-			%orig(1.f, 0.0, source, completion);
-
-		fadeWindow.hidden = YES;
-		[fadeWindow release];
-
-		backlighting = NO;
-	}];
+	%orig(factor, userDuration?userDuration.doubleValue:duration, source, completion);
 }//end animate
 %end
 
