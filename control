@@ -1,0 +1,9 @@
+Package: ws.hbang.screenfade
+Name: ScreenFade
+Depends: mobilesubstrate
+Version: 1.0~beta
+Architecture: iphoneos-arm
+Description: Fade when the screen is dimmed/undimmed
+Maintainer: HASHBANG Productions <screenfade@hbang.ws>
+Author: HASHBANG Productions <screenfade@hbang.ws>
+Section: Tweaks
