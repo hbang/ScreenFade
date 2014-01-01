@@ -3,7 +3,7 @@ Name: ScreenFade
 Depends: mobilesubstrate
 Version: 1.1~beta
 Architecture: iphoneos-arm
-Description: Fade when the screen is dimmed/undimmed
+Description: Control screen fades.
 Maintainer: HASHBANG Productions <screenfade@hbang.ws>
 Author: HASHBANG Productions <screenfade@hbang.ws>
 Section: Tweaks
