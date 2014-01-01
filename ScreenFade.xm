@@ -6,6 +6,19 @@
 -(void)animateBacklightToFactor:(float)factor duration:(double)duration source:(int)source completion:(id)completion;
 @end
 
+//I found the below class interesting, although it has
+//demonstrated no use or application in locking/unlocking.
+@interface SBBrightnessController
++(id)sharedBrightnessController;
+-(float)_calcButtonRepeatDelay;
+-(void)_setBrightnessLevel:(float)level showHUD:(BOOL)hud;
+-(void)adjustBacklightLevel:(BOOL)level;
+-(void)cancelBrightnessEvent;
+-(void)decreaseBrightnessAndRepeat;
+-(void)increaseBrightnessAndRepeat;
+-(void)setBrightnessLevel:(float)level;
+@end
+
 /* iOS 7 and above */
 %hook SBBacklightController
 -(void)animateBacklightToFactor:(float)factor duration:(double)duration source:(int)source completion:(void (^)(void))completion{
@@ -55,6 +68,8 @@ void HBSFFadeScreen(BOOL direction, void(^callback)(void)) {
 
 %hook SBUIController
 -(void)lockFromSource:(NSInteger)source{
+		NSLog(@"********* fuck");
+
 	if([[[UIDevice currentDevice] systemVersion] floatValue] < 7.0)
 		HBSFFadeScreen(NO, ^{ %orig; });
 	else

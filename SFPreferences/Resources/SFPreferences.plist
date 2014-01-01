@@ -20,7 +20,7 @@
 			<key>defaults</key>     <string>ws.hbang.screenfade</string>
 			<key>key</key>			<string>userDuration</string>
 			<key>showValue</key> 	<true/>
-			<key>min</key> 			<real>0.1</real>
+			<key>min</key> 			<real>0.0</real>
 			<key>max</key> 			<real>5.0</real>
 			<key>default</key> 		<real>0.5</real>
 		</dict>
